@@ -13,7 +13,11 @@ import java.util.Scanner;
 
 public class ChangeMaker {
 	public static void main(String[] args) {
-		runMenu();
+		try {
+			runMenu();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	/*
@@ -27,18 +31,9 @@ public class ChangeMaker {
 		ArrayList<ChangeContainer> billsAndCoins = new ArrayList<>();
 		for(Denomination d : allCurrency) {
 			BigDecimal denominationCount = amount.divide(d.getValue(),MathContext.DECIMAL128).setScale(0,RoundingMode.FLOOR);
-			switch(denominationCount.compareTo(BigDecimal.valueOf(1))) {
-				case(1):
-					billsAndCoins.add(new ChangeContainer(d,denominationCount));
-					amount = amount.subtract(d.getValue().multiply(denominationCount));
-					break;
-				case(0):
-					billsAndCoins.add(new ChangeContainer(d,denominationCount));
-					amount = amount.subtract(d.getValue().multiply(denominationCount));
-					break;
-				case(-1):
-					//Do Nothing 
-					break;
+			if(denominationCount.compareTo(BigDecimal.valueOf(1)) >= 0) {
+				billsAndCoins.add(new ChangeContainer(d,denominationCount));
+				amount = amount.subtract(d.getValue().multiply(denominationCount));
 			}
 		}
 		return billsAndCoins;
@@ -171,10 +166,10 @@ public class ChangeMaker {
 				if(input >= min && input <= max) {
 					break;
 				}else {
-					System.out.println("Enter " + min + "-" + max);
+					System.out.println("Please Enter An Integer Number Between " + min + "-" + max + " Inclusive");
 				}
 			}catch(NumberFormatException e){
-				System.out.println("Please Enter a Number");
+				System.out.println("Please Enter An Integer Number Between " + min + "-" + max + " Inclusive");
 			}
 		}
 		return input;
@@ -192,10 +187,10 @@ public class ChangeMaker {
 				if(input >= min && input <= max) {
 					break;
 				}else {
-					System.out.println("Enter " + min + "-" + max);
+					System.out.println("Please Enter A Double Between " + min + "-" + max + " Inclusive");
 				}
 			}catch(NumberFormatException e){
-				System.out.println("Please Enter a Number");
+				System.out.println("Please Enter A Double Between " + min + "-" + max + " Inclusive");
 			}
 		}
 		return input;
